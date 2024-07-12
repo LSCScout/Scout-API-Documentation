@@ -171,6 +171,7 @@
                                                          </head>
 <body>
 <div class="container">
+    <img src="./img/logo.png" alt="lakeside logo" style="margin-left: auto;margin-right: auto;margin-top: 1%;display:block;">
     <div  class="panel panel-definition" style="margin-top: 5%;">
         <div class="panel-body">
             <div style="margin-left:auto;margin-right:auto">
@@ -187,6 +188,13 @@
                 <ul>
                     <li>GET request <a href="#operation--job-jobs-get">/job/jobs?conditions=ISBN13%3d{isbn}</a></li>
                     <li><a href="#definition-JobRecord">Job record</a> will be returned as response if the title exists</li>
+                </ul> 
+                <li><h3>Check if job is in Ready to Order or Corrections</h3></li>  
+                <ul>
+                    <li><a href="#definition-JobRecord">Job record</a>.JobID will have a "TS" prefix if the job is in Corrections or a "TEP" prefix if the job is in Ready to Order.</li>
+                    -Alternatively-<br>
+                    <li><a href="#definition-JobRecord">Job record</a>.Account.Name will have a "- Correction Account" suffix if the job is in Corrections or a "- Ready to Order" suffix if the job is in Ready to Order.</li>
+                </ul> 
                         <ol>
                             <hr>
                             <h4>Job is in Ready to Order</h4>
@@ -195,7 +203,7 @@
                             <li>PATCH request <a href="#operation--page-page--jobid--patch">/page/page/{JobID}</a></li>
                             <div style="margin-bottom: 10px;">        
                                 <section >
-                                <pre><code class="lang-json">
+                                <pre style="width: 90%"><code class="lang-json">
 {<br>    
 &quot;<span class="hljs-attribute">type</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;delete&quot;</span></span>,<br>
 &quot;<span class="hljs-attribute">ordinal</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;1&quot;</span></span>,<br>
@@ -223,11 +231,27 @@
                     <ol><h4>Job does not exist in Scout</h4>
                         <li>Proceed to Bulk Upload Request</li>
                         </ol>
-                </ul>
+                
                 <hr>
                 <li><h3>Bulk Upload Request</h3>
                     <ul>
                         <li>GET request <a href="#operation--job-bulkupload-get">/job/bulkupload</a></li>
+                        response:
+                        <div style="margin-bottom: 10px;">        
+                            <section >
+                            <pre style="width: 90%"><code class="lang-json">
+{<br>    
+&quot;<span class="hljs-attribute">Credentials</span>&quot;: <span class="hljs-value"><span class="hljs-string">{</span></span><br>
+    &quot;<span class="hljs-attribute">AccessKeyID</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;XXXXXX&quot;</span></span>,<br>
+    &quot;<span class="hljs-attribute">SecretAccessKey</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;******&quot;</span></span>,<br>
+    &quot;<span class="hljs-attribute">SessionToken</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;XXXXXXYYYYYZZZZ&quot;</span></span>,<br>
+    &quot;<span class="hljs-attribute">Expiration</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;2024-04-23T17:40:09.000Z&quot;</span></span><br>
+<span class="hljs-value"><span class="hljs-string">},</span><br>
+&quot;<span class="hljs-attribute">BulkID</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;BULKxxx-xxx-xxx-xxx&quot;</span></span>,<br>
+&quot;<span class="hljs-attribute">S3Folder</span>&quot;: <span class="hljs-value"><span class="hljs-string">&quot;s3://lscscout-bulk-upload/xxxx/xxxx/&quot;</span></span><br>
+}
+                            </code></pre>
+                            </section>
                         <li><p>Upload to S3 to the S3Folder using AccessKeyID and SecretAccessKey Credentials. 
                             <br>Save BulkID from <a class="json-schema-ref" href="#/definitions/BulkUploadRecord">BulkUploadRecord</a> for subsequent requests</p></li>
                     </ul>
